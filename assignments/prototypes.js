@@ -131,6 +131,70 @@ Humanoid.prototype.greet = function () {
 
 
   // Stretch task: 
-  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
+  // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  function Villain(playerInfo) { // Villain constructor function
+    Humanoid.call(this, playerInfo);
+  }
+  Villain.prototype = Object.create(Humanoid.prototype);
+  Villain.prototype.reduceHealthPoints = function (points) {
+    this.healthPoints -= points;
+    if (this.healthPoints <= 0) {
+      return this.destroy();
+    }
+    return `${this.name}'s health points is reduced by ${points}`;
+  }
+
+  function Hero(playerInfo) { // Hero constructor function
+    Villain.call(this, playerInfo);
+  }
+  Hero.prototype = Object.create(Villain.prototype);
+
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+  
+  const villaKing = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 2,
+      width: 2,
+      height: 2,
+    },
+    healthPoints: 25,
+    name: 'Sir Kay',
+    team: 'The Mafians',
+    weapons: [
+      'Poisonous Sword',
+      'Shield',
+    ],
+    language: 'Igbo Tongue',
+  });
+
+  const westernWarrior = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 20,
+    name: 'Lavida-Loca',
+    team: 'Sambisa Forest',
+    weapons: [
+      'Gun',
+      'Dagger',
+    ],
+    language: 'Uburu',
+  });
+
+  console.log(villaKing.createdAt); // Today's date
+  console.log(villaKing.name); // Sir Kay
+  console.log(villaKing.healthPoints); // 25
+  console.log(villaKing.team); // The Mafians
+  console.log(villaKing.reduceHealthPoints(30)); // Sir Kay was removed from the game.
+
+  console.log(westernWarrior.weapons); // ['Gun', 'Dagger']
+  console.log(westernWarrior.language); // Uburu
+  console.log(westernWarrior.greet()); // Lavida-Loca offers a greeting in Uburu.
+  console.log(westernWarrior.takeDamage()); // Lavida-Loca took damage.
+  console.log(westernWarrior.reduceHealthPoints(5)); // Lavida-Loca's health points is reduced by 5.
+
